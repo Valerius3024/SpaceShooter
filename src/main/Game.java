@@ -13,7 +13,6 @@ public class Game implements Runnable {
         gamePanel.setFocusable(true);
         gamePanel.requestFocus();
         startGameLoop();
-
     }
 
     private void startGameLoop() {

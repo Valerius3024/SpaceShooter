@@ -12,7 +12,6 @@ import java.io.InputStream;
 
 public class GamePanel extends JPanel {
 
-    public static final String MAIN_SHIP_ATLAS_PNG = "/mainShip/test/1.png";
     private MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
     private BufferedImage img;
@@ -21,8 +20,9 @@ public class GamePanel extends JPanel {
     public GamePanel() {
         mouseInputs = new MouseInputs(this);
 
-        importImg();
-        loadAnimations();
+        // importImg();
+
+        importMulti();
 
         setPanelSize();
         addKeyListener(new KeyboardInputs(this));
@@ -30,20 +30,15 @@ public class GamePanel extends JPanel {
         addMouseMotionListener(mouseInputs);
     }
 
-    private void loadImages(){
-        img = importImg(MAIN_SHIP_ATLAS_PNG)
-    }
-
-    private void loadAnimations() {
-        idleMainShipAni = new BufferedImage[3];
-        for (int i = 0; i < idleMainShipAni.length; i++) {
-            //idleMainShipAni[i] = importImg();
+    private void importMulti() {
+        idleMainShipAni = new BufferedImage[4];
+        for (int i = 1; i <= idleMainShipAni.length; i++) {
+            idleMainShipAni[i - 1] = importImgWithParameter("/mainShip/test/" + i + ".png");
         }
     }
 
-
     private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/mainShip/bases/main_ship_atlas.png");
+        InputStream is = getClass().getResourceAsStream("/mainShip/test/1.png");
 
         try {
             img = ImageIO.read(is);
@@ -59,53 +54,30 @@ public class GamePanel extends JPanel {
 
     }
 
-    /*
-
-    public BufferedImage importImg(String filePath) {
-        InputStream is = getClass().getResourceAsStream(filePath);
-        BufferedImage ing;
-
+    private BufferedImage importImgWithParameter(String filepath) {
+        InputStream is = getClass().getResourceAsStream(filepath);
         try {
-            ing = ImageIO.read(is);
-            return ing;
+            BufferedImage read = ImageIO.read(is);
+            return read;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
                 is.close();
-                return ing;
             } catch (IOException e) {
-
                 e.printStackTrace();
             }
-
         }
-
+        return null;
     }
-
-    private BufferedImage[] importImg(String filePath, int x) {
-
-        BufferedImage[] arr = new BufferedImage[x];
-        for (int i = 0; i < x; i++) {
-            arr[x] = importImg(x+""+filePath);
-        }
-        return arr;
-    }
-
-     */
-
-
-
 
     private void setPanelSize() {
-        Dimension size = new Dimension(1280, 800);
+        Dimension size = new Dimension(1000, 700);
         setPreferredSize(size);
-
     }
 
     public void changeXDelta(int value) {
         this.xDelta += value;
-
     }
 
     public void changeYDelta(int value) {
@@ -115,14 +87,13 @@ public class GamePanel extends JPanel {
     public void setRectPos(int x, int y) {
         this.xDelta = x;
         this.yDelta = y;
-
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.drawImage(img.getSubimage(0, 0, 48, 48), (int) xDelta - 30, (int) yDelta - 30, 128, 128, null);
-        //g.drawImage(img, (int) xDelta, (int) yDelta, 128, 128, null);
+        //  g.drawImage(img.getSubimage(0, 0, 48, 48), (int) xDelta - 30, (int) yDelta - 30, 128, 128, null);
+        g.drawImage(idleMainShipAni[0], (int) xDelta, (int) yDelta, 128, 128, null);
     }
 
 
