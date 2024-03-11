@@ -10,24 +10,43 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static utilz.Constants.EngineConstants.*;
+import static utilz.Constants.Directions.*;
+
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
     private BufferedImage img;
     private BufferedImage[] idleMainShipAni;
+    private BufferedImage[][] engineEffectAnis;
+    private int aniTick, aniIndex, aniSpeed = 15;
+    private int engineEffect = BASIC_IDLE;
+    private int mainShipDir = -1;
+    private boolean moving = false;
 
     public GamePanel() {
         mouseInputs = new MouseInputs(this);
 
-        // importImg();
-
+        importImg();
         importMulti();
+        loadAnimations();
 
         setPanelSize();
         addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
+    }
+
+    private void loadAnimations() {
+        engineEffectAnis = new BufferedImage[8][7];
+
+        for (int j = 0; j < engineEffectAnis.length; j++) {
+            for (int i = 0; i < engineEffectAnis[j].length; i++) {
+                engineEffectAnis[j][i] = img.getSubimage(i * 48, j * 48, 48, 48);
+            }
+        }
+
     }
 
     private void importMulti() {
@@ -38,7 +57,7 @@ public class GamePanel extends JPanel {
     }
 
     private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/mainShip/test/1.png");
+        InputStream is = getClass().getResourceAsStream("/mainShip/engine effects/engine_effects_sprite.png");
 
         try {
             img = ImageIO.read(is);
@@ -72,29 +91,77 @@ public class GamePanel extends JPanel {
     }
 
     private void setPanelSize() {
-        Dimension size = new Dimension(1000, 700);
+        Dimension size = new Dimension(1280, 800);
         setPreferredSize(size);
     }
 
-    public void changeXDelta(int value) {
-        this.xDelta += value;
+    public void setDirection(int direction) {
+        this.mainShipDir = direction;
+        moving = true;
     }
 
-    public void changeYDelta(int value) {
-        this.yDelta += value;
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
-    public void setRectPos(int x, int y) {
-        this.xDelta = x;
-        this.yDelta = y;
+    private void updateAniTick() {
+
+        aniTick++;
+        if (aniTick >= aniSpeed) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= getSpriteAmount(engineEffect))
+                aniIndex = 0;
+        }
+
+    }
+
+    private void setAnimation(){
+        if (moving)
+            engineEffect = BASIC_POWER_UP;
+        else
+            engineEffect = BASIC_IDLE;
+    }
+
+    private void updatePos() {
+
+        if (moving){
+            switch (mainShipDir){
+                case LEFT:
+                    xDelta-=5;
+                    break;
+                case UP:
+                    yDelta-=5;
+                    break;
+                case RIGHT:
+                    xDelta+=5;
+                    break;
+                case DOWN:
+                    yDelta+=5;
+                    break;
+            }
+        }
+
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //  g.drawImage(img.getSubimage(0, 0, 48, 48), (int) xDelta - 30, (int) yDelta - 30, 128, 128, null);
-        g.drawImage(idleMainShipAni[0], (int) xDelta, (int) yDelta, 128, 128, null);
+        updateAniTick();
+        setAnimation();
+        updatePos();
+
+
+        //g.drawImage(img.getSubimage(0, 0, 48, 48), (int) xDelta, (int) yDelta, 96, 96, null);
+        /*g.drawImage(importImgWithParameter("/mainShip/engines/Main Ship - Engines - Base Engine.png").getSubimage(0, 0, 48, 48)
+                , (int) xDelta, (int) yDelta, 96, 96, null);
+         */
+        //g.drawImage(idleMainShipAni[0], (int) xDelta, (int) yDelta, 96, 96, null);
+        g.drawImage(engineEffectAnis[engineEffect][aniIndex], (int) xDelta, (int) yDelta + 5, 96, 96, null);
+
+
     }
+
 
 
 }
