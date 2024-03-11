@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
     private BufferedImage[] idleMainShipAni;
     private BufferedImage[][] engineEffectAnis;
     private int aniTick, aniIndex, aniSpeed = 15;
-    private int engineEffect = BASIC_IDLE;
+    private int engineEffect = BURST_IDLE;
     private int mainShipDir = -1;
     private boolean moving = false;
 
@@ -118,9 +118,9 @@ public class GamePanel extends JPanel {
 
     private void setAnimation(){
         if (moving)
-            engineEffect = BASIC_POWER_UP;
+            engineEffect = BURST_POWER_UP;
         else
-            engineEffect = BASIC_IDLE;
+            engineEffect = BURST_IDLE;
     }
 
     private void updatePos() {
@@ -128,36 +128,37 @@ public class GamePanel extends JPanel {
         if (moving){
             switch (mainShipDir){
                 case LEFT:
-                    xDelta-=5;
+                    xDelta-=3;
                     break;
                 case UP:
-                    yDelta-=5;
+                    yDelta-=3;
                     break;
                 case RIGHT:
-                    xDelta+=5;
+                    xDelta+=3;
                     break;
                 case DOWN:
-                    yDelta+=5;
+                    yDelta+=3;
                     break;
             }
         }
 
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
+    public void updateGame(){
         updateAniTick();
         setAnimation();
         updatePos();
+    }
 
-
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         //g.drawImage(img.getSubimage(0, 0, 48, 48), (int) xDelta, (int) yDelta, 96, 96, null);
-        /*g.drawImage(importImgWithParameter("/mainShip/engines/Main Ship - Engines - Base Engine.png").getSubimage(0, 0, 48, 48)
+        g.drawImage(importImgWithParameter("/mainShip/engines/Main Ship - Engines - Burst Engine.png").getSubimage(0, 0, 48, 48)
                 , (int) xDelta, (int) yDelta, 96, 96, null);
-         */
-        //g.drawImage(idleMainShipAni[0], (int) xDelta, (int) yDelta, 96, 96, null);
-        g.drawImage(engineEffectAnis[engineEffect][aniIndex], (int) xDelta, (int) yDelta + 5, 96, 96, null);
+
+        g.drawImage(engineEffectAnis[engineEffect][aniIndex], (int) xDelta, (int) yDelta+17, 96, 96, null);
+        g.drawImage(idleMainShipAni[0], (int) xDelta, (int) yDelta, 96, 96, null);
+
 
 
     }
