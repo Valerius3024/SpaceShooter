@@ -1,5 +1,9 @@
 package main;
 
+import entities.MainShip;
+
+import java.awt.*;
+
 public class Game implements Runnable {
 
     private GameWindow gameWindow;
@@ -7,13 +11,20 @@ public class Game implements Runnable {
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
+    private MainShip mainShip;
 
     public Game() {
-        gamePanel = new GamePanel();
+        initClasses();
+        gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.setFocusable(true);
         gamePanel.requestFocus();
         startGameLoop();
+
+    }
+
+    private void initClasses() {
+        mainShip = new MainShip(200, 200);
     }
 
     private void startGameLoop() {
@@ -21,8 +32,12 @@ public class Game implements Runnable {
         gameThread.start();
     }
 
-    public void update(){
-        gamePanel.updateGame();
+    public void update() {
+        mainShip.update();
+    }
+
+    public void render(Graphics g) {
+        mainShip.render(g);
     }
 
     @Override
@@ -71,5 +86,7 @@ public class Game implements Runnable {
 
     }
 
-
+    public MainShip getMainShip() {
+        return mainShip;
+    }
 }
