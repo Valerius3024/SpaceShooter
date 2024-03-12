@@ -24,18 +24,10 @@ public class KeyboardInputs implements KeyListener {
     public void keyPressed(KeyEvent e) {
 
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W:
-                gamePanel.getGame().getMainShip().setDirection(UP);
-                break;
-            case KeyEvent.VK_A:
-                gamePanel.getGame().getMainShip().setDirection(LEFT);
-                break;
-            case KeyEvent.VK_S:
-                gamePanel.getGame().getMainShip().setDirection(DOWN);
-                break;
-            case KeyEvent.VK_D:
-                gamePanel.getGame().getMainShip().setDirection(RIGHT);
-                break;
+            case KeyEvent.VK_W -> gamePanel.getGame().getMainShip().setUp(true);
+            case KeyEvent.VK_A -> gamePanel.getGame().getMainShip().setLeft(true);
+            case KeyEvent.VK_S -> gamePanel.getGame().getMainShip().setDown(true);
+            case KeyEvent.VK_D -> gamePanel.getGame().getMainShip().setRight(true);
         }
 
     }
@@ -44,15 +36,15 @@ public class KeyboardInputs implements KeyListener {
     public void keyReleased(KeyEvent e) {
 
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_D:
-                gamePanel.getGame().getMainShip().setMoving(false);
-                break;
+            case KeyEvent.VK_W -> gamePanel.getGame().getMainShip().setUp(false);
+            case KeyEvent.VK_A -> gamePanel.getGame().getMainShip().setLeft(false);
+            case KeyEvent.VK_S -> gamePanel.getGame().getMainShip().setDown(false);
+            case KeyEvent.VK_D -> gamePanel.getGame().getMainShip().setRight(false);
         }
 
     }
+
+
 
 
 }

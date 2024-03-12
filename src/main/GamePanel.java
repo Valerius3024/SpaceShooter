@@ -2,7 +2,6 @@ package main;
 
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
-
 import javax.swing.*;
 import java.awt.*;
 

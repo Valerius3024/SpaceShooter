@@ -7,10 +7,9 @@ import java.io.InputStream;
 
 public class SpriteUtil {
 
-    private BufferedImage[][] loadSpriteAtlas(String path, int subImageWidth, int subImageHeight, int rows, int columns) {
+    private BufferedImage[][] loadSpriteSheet(String path, int subImageWidth, int subImageHeight, int rows, int columns) {
         BufferedImage[][] sprites = null;
-        try {
-            InputStream is = getClass().getResourceAsStream(path);
+        try (InputStream is = getClass().getResourceAsStream(path)) {
             BufferedImage img = ImageIO.read(is);
             sprites = new BufferedImage[rows][columns];
             for (int j = 0; j < rows; j++) {
@@ -18,15 +17,14 @@ public class SpriteUtil {
                     sprites[j][i] = img.getSubimage(i * subImageWidth, j * subImageHeight, subImageWidth, subImageHeight);
                 }
             }
-            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return sprites;
     }
 
-    public BufferedImage[][] getSpriteAtlas(String path, int subImageWidth, int subImageHeight, int rows, int columns) {
-        return loadSpriteAtlas(path, subImageWidth, subImageHeight, rows, columns);
+    public BufferedImage[][] getSpriteSheet(String path, int subImageWidth, int subImageHeight, int rows, int columns) {
+        return loadSpriteSheet(path, subImageWidth, subImageHeight, rows, columns);
     }
 
 

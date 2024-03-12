@@ -1,7 +1,6 @@
 package main;
 
 import entities.MainShip;
-
 import java.awt.*;
 
 public class Game implements Runnable {
@@ -86,7 +85,13 @@ public class Game implements Runnable {
 
     }
 
+    public void windowFocusLost() {
+        mainShip.resetDirBooleans();
+    }
+
     public MainShip getMainShip() {
         return mainShip;
     }
+
+
 }
